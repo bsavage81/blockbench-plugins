@@ -47,8 +47,8 @@ MenuBar.addAction(new Action(
 		{
 			label: 'Spawn Egg Accent',
 			node: '<input type="color" id="EFG_color_accent">'
-        },
-        {
+        	},
+		{
 			label: 'Pack Icon',
 			node: '<input type="file" id="EFG_packicon" accept="image/png">'
 		},
@@ -100,8 +100,8 @@ MenuBar.addAction(new Action(
 					color2: $('.dialog#EFG_gen input#EFG_color_accent').val(),
 					model: $('.dialog#EFG_gen input#EFG_model').is(':checked'),
 					animation: $('.dialog#EFG_gen input#EFG_animation').val(),
-                    actrl: $('.dialog#EFG_gen input#EFG_actrl').val(),
-                    packicon: $('.dialog#EFG_gen input#EFG_packicon').val(),
+                    			actrl: $('.dialog#EFG_gen input#EFG_actrl').val(),
+                   			packicon: $('.dialog#EFG_gen input#EFG_packicon').val(),
 					alpha: $('.dialog#EFG_gen input#EFG_alpha').is(':checked'),
 					loot: $('.dialog#EFG_gen input#EFG_loot').is(':checked'),
 					spawnrules: $('.dialog#EFG_gen input#EFG_spawnrules').is(':checked'),
