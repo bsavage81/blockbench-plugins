@@ -4,7 +4,7 @@ var plugin_data = {
 	icon: 'library_books',
 	author: 'JannisX11 and BSavage81',
 	description: 'Generate File Structure for Bedrock Entities',
-	version: '1.2.1',
+	version: '1.2.2',
 	variant: 'desktop'
 }
 MenuBar.addAction(new Action(
@@ -33,6 +33,10 @@ MenuBar.addAction(new Action(
 			node: '<input class="dark_bordered half" type="text" id="EFG_mev" value="1, 8, 0">'
 		},
 		{
+			label: 'Format Version #',
+			node: '<input class="dark_bordered half" type="text" id="EFG_format" value="1.10.0">'
+		},
+		{
 			label: 'Game ID',
 			node: '<input class="dark_bordered half" type="text" id="EFG_id" placeholder="space:firefly">'
 		},
@@ -47,10 +51,6 @@ MenuBar.addAction(new Action(
 		{
 			label: 'Spawn Egg Accent',
 			node: '<input type="color" id="EFG_color_accent">'
-        	},
-		{
-			label: 'Pack Icon',
-			node: '<input type="file" id="EFG_packicon" accept="image/png">'
 		},
 		{
 			label: '---Optional Items---',
@@ -94,14 +94,14 @@ MenuBar.addAction(new Action(
 					desc: $('.dialog#EFG_gen input#EFG_desc').val(),
 					version: $('.dialog#EFG_gen input#EFG_version').val(),
 					mev: $('.dialog#EFG_gen input#EFG_mev').val(),
+					format: $('.dialog#EFG_gen input#EFG_format').val(),
 					id: $('.dialog#EFG_gen input#EFG_id').val(),
 					filename: $('.dialog#EFG_gen input#EFG_filename').val(),
 					color1: $('.dialog#EFG_gen input#EFG_color_main').val(),
 					color2: $('.dialog#EFG_gen input#EFG_color_accent').val(),
 					model: $('.dialog#EFG_gen input#EFG_model').is(':checked'),
 					animation: $('.dialog#EFG_gen input#EFG_animation').val(),
-                    			actrl: $('.dialog#EFG_gen input#EFG_actrl').val(),
-                   			packicon: $('.dialog#EFG_gen input#EFG_packicon').val(),
+					actrl: $('.dialog#EFG_gen input#EFG_actrl').val(),
 					alpha: $('.dialog#EFG_gen input#EFG_alpha').is(':checked'),
 					loot: $('.dialog#EFG_gen input#EFG_loot').is(':checked'),
 					spawnrules: $('.dialog#EFG_gen input#EFG_spawnrules').is(':checked'),
@@ -179,16 +179,11 @@ fs.writeFile(options.bf + S + options.filename + ' rp' + S + 'manifest.json',
 }
 `, onError)
 
-//RP Packicon
-
-prep__Folder(options.bf + S + options.filename + ' rp')
-fs.writeFile(options.bf + S + options.filename + ' rp' + S + 'pack_icon.png', {savetype: 'image', content: options.packicon})
-
 //Entity Definition
 prep__Folder(options.bf + S + options.filename + ' rp' + S + 'entity')
-blockbench.writeFile(options.bf + S + options.filename + ' rp' + S + 'entity' + S + options.filename + '.json',
+fs.writeFile(options.bf + S + options.filename + ' rp' + S + 'entity' + S + options.filename + '.json',
 `{
-	"format_version": "1.8.0",
+	"format_version": "${options.format}",
 		"minecraft:client_entity": {
 			"description": {
 				"identifier": "${options.id}",
@@ -225,7 +220,7 @@ blockbench.writeFile(options.bf + S + options.filename + ' rp' + S + 'entity' + 
 prep__Folder(options.bf + S + options.filename + ' rp' + S + 'render_controllers')
 fs.writeFile(options.bf + S + options.filename + ' rp' + S + 'render_controllers' + S + options.filename + '.json',
 `{
-	"format_version": "1.10.0",
+	"format_version": "${options.format}",
 	"render_controllers": {
 		"controller.render.${options.filename}": {
 			"geometry": "Geometry.default",
@@ -247,7 +242,7 @@ if (options.model)
 		prep__Folder(options.bf + S + options.filename + ' rp' + S + 'models' + S + 'entity')
 		fs.writeFile(options.bf + S + options.filename + ' rp' + S + 'models' + S + 'entity' + S + options.filename + '.json',
 `{
-	"format_version": "1.10.0",
+	"format_version": "${options.format}",
 	"geometry.${options.filename}": {
 		"texturewidth": 16,
 		"textureheight": 16,
@@ -281,7 +276,7 @@ if (options.animation)
 		prep__Folder(options.bf + S + options.filename + ' rp' + S + 'animations')
 		fs.writeFile(options.bf + S + options.filename + ' rp' + S + 'animations' + S + options.filename + '.json',
 `{
-	"format_version": "1.10.0",
+	"format_version": "${options.format}",
 	"animations": {
 		"animation.${options.filename}.${options.animation}": {
 		}
@@ -296,7 +291,7 @@ if (options.actrl && options.animation)
 		prep__Folder(options.bf + S + options.filename + ' rp' + S + 'animation_controllers')
 		fs.writeFile(options.bf + S + options.filename + ' rp' + S + 'animation_controllers' + S + options.filename + '.json',
 `{
-	"format_version": "1.10.0",
+	"format_version": "${options.format}",
 	"animation_controllers": {
     	"controller.animation.${options.filename}.${options.actrl}": {
 			"states": {
@@ -347,7 +342,7 @@ prep__Folder(options.bf + S + options.filename + ' bp')
 prep__Folder(options.bf + S + options.filename + ' bp' + S + 'entities')
 fs.writeFile(options.bf + S + options.filename + ' bp' + S + 'entities' + S + options.filename + '.json',
 `{
-	"format_version": "1.10.0",
+	"format_version": "${options.format}",
 	"minecraft:entity": {
 		"description": {
 			"identifier": "${options.id}",
@@ -384,7 +379,7 @@ if (options.spawnrules)
     	prep__Folder(options.bf + S + options.filename + ' bp' + S + 'spawn_rules')
         fs.writeFile(options.bf + S + options.filename + ' bp' + S + 'spawn_rules' + S + options.filename + '.json',
 `{
-	"format_version": "1.8.0",
+	"format_version": "${options.format}",
 	"minecraft:spawn_rules": {
 		"description": {
 			"identifier": "${options.id}",
